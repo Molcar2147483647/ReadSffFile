@@ -154,13 +154,6 @@ sff.GetSpriteData(XXX).IsDummy(); // ダミーデータ判断
 ```
 戻り値 bool 判定結果 (false = 自身が正常なデータ：true = 自身がダミーデータ))  
 
-### ダミーデータ配列
-ピクセルデータ配列／パレットデータ配列のダミーデータです  
-自身がダミーデータの場合にバイナリデータのダミーとして使用されます  
-```
-constexpr const unsigned char* DummyBinaryData[1] = {}; // バイナリデータのダミー
-```
-
 ### 軸座標Xの取得
 SAEで設定した軸座標Xを返します  
 ダミーデータの場合は 0 を返します  
@@ -196,6 +189,7 @@ sff.GetSpriteData(XXX).ImageNo(); // イメージ番号を取得
 ### ピクセルデータの取得
 画像のピクセルデータ配列を返します  
 ダミーデータの場合は DummyBinaryData を返します  
+DummyBinaryData は常に長さ1の配列で内容は {0} です  
 ```
 sff.GetSpriteData(XXX).PixelBinaryData(); // イメージ番号を取得
 ```
@@ -213,6 +207,7 @@ sff.GetSpriteData(XXX).PixelBinaryDataByteSize(); // ピクセルデータバイ
 ### パレットデータの取得
 画像のパレットデータ配列を返します  
 ダミーデータの場合は DummyBinaryData を返します  
+DummyBinaryData は常に長さ1の配列で内容は {0} です  
 ```
 sff.GetSpriteData(XXX).PaletteBinaryData(); // イメージ番号を取得
 ```
