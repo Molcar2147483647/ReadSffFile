@@ -51,32 +51,32 @@ namespace SAELib {
 
 		struct Convert {
 		private: // 定数秘匿のため名前空間でなく構造体で定義
-			static constexpr int32_t kAxisBit = 16;
-			static constexpr int32_t kAxisXMask = (1 << kAxisBit) - 1;
-			static constexpr int32_t kAxisXSignMask = (kAxisXMask >> 1) + 1;
-			static constexpr int32_t kAxisYMask = -kAxisXMask - 1;
+			inline static constexpr int32_t kAxisBit = 16;
+			inline static constexpr int32_t kAxisXMask = (1 << kAxisBit) - 1;
+			inline static constexpr int32_t kAxisXSignMask = (kAxisXMask >> 1) + 1;
+			inline static constexpr int32_t kAxisYMask = -kAxisXMask - 1;
 
-			static constexpr int32_t kIntHalfWidth = 16;
-			static constexpr int32_t kIntHalfMask = (1 << kIntHalfWidth) - 1;
+			inline static constexpr int32_t kIntHalfWidth = 16;
+			inline static constexpr int32_t kIntHalfMask = (1 << kIntHalfWidth) - 1;
 
 		public:
-			[[nodiscard]] static constexpr int32_t EncodeSpriteAxis(int32_t AxisX, int32_t AxisY) noexcept {
+			[[nodiscard]] inline static constexpr int32_t EncodeSpriteAxis(int32_t AxisX, int32_t AxisY) noexcept {
 				return ((AxisX & kAxisXMask) | ((AxisX < 0) * kAxisXSignMask)) | (((AxisY & kAxisXMask) | ((AxisY < 0) * kAxisXSignMask)) << kAxisBit);
 			}
-			[[nodiscard]] static constexpr int32_t DecodeSpriteAxisX(int32_t SpriteAxis) noexcept {
+			[[nodiscard]] inline static constexpr int32_t DecodeSpriteAxisX(int32_t SpriteAxis) noexcept {
 				return (SpriteAxis & (kAxisXSignMask - 1)) - (SpriteAxis & kAxisXSignMask);
 			}
-			[[nodiscard]] static constexpr int32_t DecodeSpriteAxisY(int32_t SpriteAxis) noexcept {
+			[[nodiscard]] inline static constexpr int32_t DecodeSpriteAxisY(int32_t SpriteAxis) noexcept {
 				return (SpriteAxis & kAxisYMask) >> kAxisBit;
 			}
 
-			[[nodiscard]] static constexpr int32_t EncodeIntHalf(int32_t GroupNo, int32_t ImageNo) noexcept {
+			[[nodiscard]] inline static constexpr int32_t EncodeIntHalf(int32_t GroupNo, int32_t ImageNo) noexcept {
 				return (GroupNo & kIntHalfMask) | ((ImageNo << kIntHalfWidth) & ~kIntHalfMask);
 			}
-			[[nodiscard]] static constexpr int32_t DecodeSpriteGroupNo(int32_t SpriteNumber) noexcept {
+			[[nodiscard]] inline static constexpr int32_t DecodeSpriteGroupNo(int32_t SpriteNumber) noexcept {
 				return (SpriteNumber & kIntHalfMask);
 			}
-			[[nodiscard]] static constexpr int32_t DecodeSpriteImageNo(int32_t SpriteNumber) noexcept {
+			[[nodiscard]] inline static constexpr int32_t DecodeSpriteImageNo(int32_t SpriteNumber) noexcept {
 				return (SpriteNumber >> kIntHalfWidth) & kIntHalfMask;
 			}
 		};
@@ -100,10 +100,10 @@ namespace SAELib {
 			// SFFデータ検索開始ディレクトリパス指定
 			// 
 
-			static constexpr int32_t kThrowError = 1 << 0;
-			static constexpr int32_t kCreateLogFile = 1 << 1;
-			static constexpr int32_t kCreateSAELibFile = 1 << 2;
-			static constexpr int32_t kDefaultConfig = 0;
+			inline static constexpr int32_t kThrowError = 1 << 0;
+			inline static constexpr int32_t kCreateLogFile = 1 << 1;
+			inline static constexpr int32_t kCreateSAELibFile = 1 << 2;
+			inline static constexpr int32_t kDefaultConfig = 0;
 
 			// SAELibファイルのパス
 			std::filesystem::path SAELibFilePath_ = {};
@@ -414,9 +414,9 @@ namespace SAELib {
 		// BMPバイナリ生成
 		struct T_BuildBMPBinary {
 		private:
-			static constexpr ksize_t kBMPHeaderSize = 14 + 40;
-			static constexpr ksize_t kBMPPaletteSize = 1024;
-			static constexpr ksize_t kBMPPixelOffBits = kBMPHeaderSize + kBMPPaletteSize;
+			inline static constexpr ksize_t kBMPHeaderSize = 14 + 40;
+			inline static constexpr ksize_t kBMPPaletteSize = 1024;
+			inline static constexpr ksize_t kBMPPixelOffBits = kBMPHeaderSize + kBMPPaletteSize;
 
 			const unsigned char* const kSpriteBinary;
 			const unsigned char* const kPaletteBinary;
@@ -435,18 +435,18 @@ namespace SAELib {
 			[[nodiscard]] uint8_t BMPScanlinePadding() const noexcept { return (4 - (BytesPerLine() % 4)) % 4; }
 			[[nodiscard]] ksize_t BMPBinarySize() const noexcept { return kBMPPixelOffBits + (BytesPerLine() + BMPScanlinePadding()) * Ymax(); }
 
-			[[nodiscard]] static constexpr unsigned char Buffer1(uint16_t value) noexcept { return (value & 0xFF); }
-			[[nodiscard]] static constexpr unsigned char Buffer2(uint16_t value) noexcept { return (value >> 8) & 0xFF; }
+			[[nodiscard]] inline static constexpr unsigned char Buffer1(uint16_t value) noexcept { return (value & 0xFF); }
+			[[nodiscard]] inline static constexpr unsigned char Buffer2(uint16_t value) noexcept { return (value >> 8) & 0xFF; }
 
-			[[nodiscard]] static constexpr unsigned char Buffer1(uint32_t value) noexcept { return (value & 0xFF); }
-			[[nodiscard]] static constexpr unsigned char Buffer2(uint32_t value) noexcept { return (value >> 8) & 0xFF; }
-			[[nodiscard]] static constexpr unsigned char Buffer3(uint32_t value) noexcept { return (value >> 16) & 0xFF; }
-			[[nodiscard]] static constexpr unsigned char Buffer4(uint32_t value) noexcept { return (value >> 24) & 0xFF; }
+			[[nodiscard]] inline static constexpr unsigned char Buffer1(uint32_t value) noexcept { return (value & 0xFF); }
+			[[nodiscard]] inline static constexpr unsigned char Buffer2(uint32_t value) noexcept { return (value >> 8) & 0xFF; }
+			[[nodiscard]] inline static constexpr unsigned char Buffer3(uint32_t value) noexcept { return (value >> 16) & 0xFF; }
+			[[nodiscard]] inline static constexpr unsigned char Buffer4(uint32_t value) noexcept { return (value >> 24) & 0xFF; }
 
-			[[nodiscard]] static constexpr unsigned char Buffer1(size_t value) noexcept { return (value & 0xFF); }
-			[[nodiscard]] static constexpr unsigned char Buffer2(size_t value) noexcept { return (value >> 8) & 0xFF; }
-			[[nodiscard]] static constexpr unsigned char Buffer3(size_t value) noexcept { return (value >> 16) & 0xFF; }
-			[[nodiscard]] static constexpr unsigned char Buffer4(size_t value) noexcept { return (value >> 24) & 0xFF; }
+			[[nodiscard]] inline static constexpr unsigned char Buffer1(size_t value) noexcept { return (value & 0xFF); }
+			[[nodiscard]] inline static constexpr unsigned char Buffer2(size_t value) noexcept { return (value >> 8) & 0xFF; }
+			[[nodiscard]] inline static constexpr unsigned char Buffer3(size_t value) noexcept { return (value >> 16) & 0xFF; }
+			[[nodiscard]] inline static constexpr unsigned char Buffer4(size_t value) noexcept { return (value >> 24) & 0xFF; }
 
 			void InitBinaryBuffers() {
 				BMPBinary.resize(BMPBinarySize());
@@ -1189,6 +1189,8 @@ namespace SAELib {
 
 				const auto& ParamRef() const noexcept { return kSFFBinaryDataPtr->DataList(kDataListIndex); }
 
+				inline static constexpr const unsigned char* DummyBinaryData[1] = {};
+
 			public:
 				/**
 				* @brief ダミーデータ判断
@@ -1200,17 +1202,6 @@ namespace SAELib {
 				* @return bool (false = 自身が正常なデータ：true = 自身がダミーデータ)
 				*/
 				bool IsDummy() const noexcept { return kDataListIndex == KSIZE_MAX; }
-
-				/**
-				* @brief ダミーデータ配列
-				*
-				* 　ピクセルデータ配列／パレットデータ配列のダミーデータです
-				* 
-				* 　自身がダミーデータの場合にバイナリデータのダミーとして使用されます
-				*
-				* @return const unsigned char* DummyBinaryData ダミーデータ配列
-				*/
-				static constexpr const unsigned char* DummyBinaryData[1] = {};
 
 				/**
 				* @brief 軸座標Xの取得
@@ -1262,11 +1253,13 @@ namespace SAELib {
 				* 　画像のピクセルデータ配列を返します
 				*
 				* 　ダミーデータの場合は DummyBinaryData を返します
+				* 
+				* 　DummyBinaryData は常に長さ1の配列で内容は {0} です
 				*
 				* @return const unsigned char* const PixelBinaryData ピクセルデータ配列
 				* @retval const unsigned char* const DummyBinaryData ダミーデータ配列
 				*/
-				const unsigned char* const PixelBinaryData() const noexcept { return (IsDummy() ? DummyBinaryData[0] : kSFFBinaryDataPtr->IndexList_Sprite(ParamRef().IndexListNumber())); }
+				const unsigned char* const PixelBinaryData() const noexcept { return (IsDummy() ? DummyBinaryData : kSFFBinaryDataPtr->IndexList_Sprite(ParamRef().IndexListNumber())); }
 				
 				/**
 				* @brief ピクセルデータサイズの取得
@@ -1285,11 +1278,13 @@ namespace SAELib {
 				* 　画像のパレットデータ配列を返します
 				*
 				* 　ダミーデータの場合は DummyBinaryData を返します
+				* 
+				* 　DummyBinaryData は常に長さ1の配列で内容は {0} です
 				*
 				* @return const unsigned char* const PaletteBinaryData パレットデータ配列
 				* @retval const unsigned char* const DummyBinaryData ダミーデータ配列
 				*/
-				const unsigned char* const PaletteBinaryData() const noexcept { return (IsDummy() ? DummyBinaryData[0] : kSFFBinaryDataPtr->IndexList_Palette(ParamRef().IndexListNumber())); }
+				const unsigned char* const PaletteBinaryData() const noexcept { return (IsDummy() ? DummyBinaryData : kSFFBinaryDataPtr->IndexList_Palette(ParamRef().IndexListNumber())); }
 				
 				/**
 				* @brief BMPデータの取得
