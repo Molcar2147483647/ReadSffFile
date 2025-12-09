@@ -152,7 +152,7 @@ SFFConfig::SetThrowError の設定が OFF の場合にエラー回避のため�
 ```
 sff.GetSpriteData(XXX).IsDummy(); // ダミーデータ判断
 ```
-戻り値 bool 判定結果 (false = 自身が正常なデータ：true = 自身がダミーデータ))  
+戻り値 bool 判定結果 (false = 自身が正常なデータ：true = 自身がダミーデータ)  
 
 ### 軸座標Xの取得
 SAEで設定した軸座標Xを返します  
