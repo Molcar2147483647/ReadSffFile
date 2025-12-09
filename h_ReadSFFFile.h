@@ -1372,7 +1372,7 @@ namespace SAELib {
 			*
 			* 　読み込んだSFFデータの空かを判定します  
 			*
-			* @return bool 判定結果 (false = データが空：true = データが存在)
+			* @return bool 判定結果 (false = データが存在：true = データが空)
 			*/
 			bool empty() const noexcept {
 				return FileName().empty() && SFFBinaryData.empty() && SpriteNumberUMap.empty() && SpriteDataUMap.empty();
