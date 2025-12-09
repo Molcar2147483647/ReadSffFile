@@ -1189,7 +1189,8 @@ namespace SAELib {
 
 				const auto& ParamRef() const noexcept { return kSFFBinaryDataPtr->DataList(kDataListIndex); }
 
-				inline static constexpr const unsigned char* DummyBinaryData[1] = {};
+				inline static constexpr unsigned char kDummyBinaryArray[1] = { 0 };
+				inline static constexpr const unsigned char* kDummyBinaryData = kDummyBinaryArray;
 
 			public:
 				/**
@@ -1259,7 +1260,7 @@ namespace SAELib {
 				* @return const unsigned char* const PixelBinaryData ピクセルデータ配列
 				* @retval const unsigned char* const DummyBinaryData ダミーデータ配列
 				*/
-				const unsigned char* const PixelBinaryData() const noexcept { return (IsDummy() ? DummyBinaryData : kSFFBinaryDataPtr->IndexList_Sprite(ParamRef().IndexListNumber())); }
+				const unsigned char* const PixelBinaryData() const noexcept { return (IsDummy() ? kDummyBinaryData : kSFFBinaryDataPtr->IndexList_Sprite(ParamRef().IndexListNumber())); }
 				
 				/**
 				* @brief ピクセルデータサイズの取得
@@ -1284,7 +1285,7 @@ namespace SAELib {
 				* @return const unsigned char* const PaletteBinaryData パレットデータ配列
 				* @retval const unsigned char* const DummyBinaryData ダミーデータ配列
 				*/
-				const unsigned char* const PaletteBinaryData() const noexcept { return (IsDummy() ? DummyBinaryData : kSFFBinaryDataPtr->IndexList_Palette(ParamRef().IndexListNumber())); }
+				const unsigned char* const PaletteBinaryData() const noexcept { return (IsDummy() ? kDummyBinaryData : kSFFBinaryDataPtr->IndexList_Palette(ParamRef().IndexListNumber())); }
 				
 				/**
 				* @brief BMPデータの取得
