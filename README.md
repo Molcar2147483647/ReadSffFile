@@ -148,7 +148,7 @@ sff.size(); // SFFデータサイズを取得
 ## class SAELib::SFF::SpriteData
 ### ダミーデータ判断
 自身がダミーデータであるかを確認します  
-SFFConfig::SetThrowErrorの設定がOFFの場合にエラー回避のために使用されます  
+SFFConfig::SetThrowError の設定が OFF の場合にエラー回避のために使用されます  
 ```
 sff.GetSpriteData(XXX).IsDummy(); // ダミーデータ判断
 ```
