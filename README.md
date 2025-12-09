@@ -81,7 +81,7 @@ SFFデータへ指定したインデックスでアクセスします
 sff.GetSpriteDataIndex(0); // 0番目の画像データを取得
 ```
 引数1 int32_t Index インデックス  
-戻り値1 対象が存在する GetSpriteData(Index)の参照  
+戻り値1 対象が存在する GetSpriteData(Index)のデータ  
 戻り値2 対象が存在しない SFFConfig::SetThrowError (false = ダミーデータの参照：true = 例外を投げる)  
 
 ### 指定番号の画像をBMP出力
