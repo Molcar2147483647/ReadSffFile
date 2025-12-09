@@ -252,16 +252,16 @@ SAELib::SFFConfig::GetThrowError(); // エラー出力切り替え設定を取�
 戻り値 bool (false = ログとして記録する：true = 例外を投げる)
 
 ### エラーログファイルを作成設定/取得
-このライブラリ関数で発生したエラーのログファイルを出力するかどうか指定できます  
+このライブラリ関数で発生したエラーのログファイルを作成するかどうか指定できます  
 ```
 SAELib::SFFConfig::SetCreateLogFile(bool flag); // エラーログファイルを作成設定
 ```
-引数1 bool (false = ログファイルを出力しない：true = ログファイルを出力する)  
+引数1 bool (false = ログファイルを作成しない：true = ログファイルを作成する)  
 戻り値 なし(void)  
 ```
 SAELib::SFFConfig::GetCreateLogFile(); // エラーログファイルを作成設定を取得  
 ```
-戻り値 bool (false = ログファイルを出力しない：true = ログファイルを出力する)    
+戻り値 bool (false = ログファイルを作成しない：true = ログファイルを作成する)    
 
 ### SAELibフォルダを作成設定/取得
 ファイルの出力先としてSAELibファイルを使用するかを指定できます  
@@ -274,7 +274,7 @@ SAELib::SFFConfig::SetCreateSAELibFile(bool flag, const std::string& Path = "");
 ```
 SAELib::SFFConfig::GetCreateSAELibFile(); // SAELibフォルダを作成設定を取得  
 ```
-戻り値 const std::string& CreateSAELibFile SAELibフォルダ作成先  
+戻り値 bool (false = SAELibファイルを使用しない：true = SAELibファイルを使用する)  
 
 ### SAELibフォルダのパス設定/取得
 SAELibファイルの作成パスを指定できます  
