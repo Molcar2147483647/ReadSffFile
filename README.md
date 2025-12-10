@@ -69,7 +69,7 @@ sff.GetSpriteData(9000, 0); // 画像番号9000-0のデータを取得
 ### 指定インデックスデータの存在確認
 読み込んだSFFデータを検索し、指定インデックスのデータ存在するかを確認します  
 ```
-air.ExistSpriteDataIndex(0); // 0番目のデータが存在するか確認
+sff.ExistSpriteDataIndex(0); // 0番目のデータが存在するか確認
 ```
 引数1 int32_t index データ配列インデックス  
 戻り値 bool 検索結果 (false = 存在なし : true = 存在あり)
@@ -191,7 +191,7 @@ sff.GetSpriteData(XXX).ImageNo(); // イメージ番号を取得
 ダミーデータの場合は DummyBinaryData を返します  
 DummyBinaryData は常に長さ1の配列で内容は {0} です  
 ```
-sff.GetSpriteData(XXX).PixelBinaryData(); // イメージ番号を取得
+sff.GetSpriteData(XXX).PixelBinaryData(); // ピクセルデータ配列を取得
 ```
 戻り値1 const unsigned char* const PixelBinaryData ピクセルデータ配列  
 戻り値2 const unsigned char* const DummyBinaryData ダミーデータ配列  
@@ -209,9 +209,9 @@ sff.GetSpriteData(XXX).PixelBinaryDataByteSize(); // ピクセルデータバイ
 ダミーデータの場合は DummyBinaryData を返します  
 DummyBinaryData は常に長さ1の配列で内容は {0} です  
 ```
-sff.GetSpriteData(XXX).PaletteBinaryData(); // イメージ番号を取得
+sff.GetSpriteData(XXX).PaletteBinaryData(); // パレットデータ配列を取得
 ```
-戻り値1 const unsigned char* const PaletteBinaryData ピクセルデータ配列  
+戻り値1 const unsigned char* const PaletteBinaryData パレットデータ配列  
 戻り値2 const unsigned char* const DummyBinaryData ダミーデータ配列  
 
 ### BMPデータの取得
