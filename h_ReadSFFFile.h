@@ -2,24 +2,26 @@
 #define INCLUDEGUARD_READSFFFILE_HEADER
 
 #include <stdint.h>		 // uint32_tとかのやつ
+#include <string>		 // string系のやつ
+#include <cstring>		 // memsetとかのやつ
+#include <stdexcept>	 // runtime_errorのやつ
 #include <fstream>		 // ファイル読み取り
-#include <sstream>		 // C++17環境でstd::to_stringするやつ
 #include <filesystem>	 // ファイル検索
+#include <system_error>  // std::error_codeのやつ
 #include <array>		 // 固定配列のやつ
 #include <vector>		 // 可変長配列のやつ
 #include <unordered_map> // ハッシュ的なやつ
-#include <limits>		 // std::numeric_limitsのやつ
 
 namespace SAELib {
 	namespace ReadSffFile_detail {
 		using ksize_t = uint32_t;
-		inline constexpr ksize_t KSIZE_MAX = std::numeric_limits<ksize_t>::max();
+		inline constexpr ksize_t KSIZE_MAX = static_cast<ksize_t>(~ksize_t{ 0 });
 
 		namespace ReadSffFileFormat {
 			inline constexpr double kVersion = 1.00;
 			inline constexpr std::string_view kSystemDirectoryName = "SAELib";
 			inline constexpr std::string_view kErrorLogFileName = "SAELib_SFFErrorLog";
-		};
+		}
 
 		namespace SFFFormat {
 			inline constexpr std::string_view kExtension = ".sff";
@@ -32,7 +34,7 @@ namespace SAELib {
 			inline constexpr ksize_t kSFFPaletteSize = 768;
 			inline constexpr ksize_t kSpriteBinaryPixelOffbits = 128;
 			inline constexpr ksize_t kFileSizeLimit = 0xffffffff;
-		};
+		}
 
 		namespace DecodeBinary {
 			[[nodiscard]] inline constexpr uint16_t UInt16LE(const unsigned char* const buffer) noexcept {
@@ -47,7 +49,7 @@ namespace SAELib {
 			[[nodiscard]] inline constexpr uint32_t UInt32BE(const unsigned char* const buffer) noexcept { //（未使用）
 				return buffer[3] | (buffer[2] << 8) | (buffer[1] << 16) | (buffer[0] << 24);
 			}
-		};
+		}
 
 		struct Convert {
 		private: // 定数秘匿のため名前空間でなく構造体で定義
@@ -429,7 +431,7 @@ namespace SAELib {
 			[[nodiscard]] uint16_t Ymax() const noexcept { return 1 + DecodeBinary::UInt16LE(&kSpriteBinary[10]); }
 			[[nodiscard]] uint32_t HRes() const noexcept { return static_cast<uint32_t>(DecodeBinary::UInt16LE(&kSpriteBinary[12]) * 39.3701); } // 意味のある計算か不明
 			[[nodiscard]] uint32_t VRes() const noexcept { return static_cast<uint32_t>(DecodeBinary::UInt16LE(&kSpriteBinary[14]) * 39.3701); }
-			[[nodiscard]] ksize_t ImageDataSize() const noexcept { return  ((Xmax() * BitsPerPixel() + 31) / 32) * 4 * Ymax(); }
+			[[nodiscard]] ksize_t ImageDataSize() const noexcept { return ((Xmax() * BitsPerPixel() + 31) / 32) * 4 * Ymax(); }
 			[[nodiscard]] ksize_t FileSize() const noexcept { return kBMPHeaderSize + kBMPPaletteSize + ImageDataSize(); }
 			[[nodiscard]] uint16_t BytesPerLine() const noexcept { return DecodeBinary::UInt16LE(&kSpriteBinary[66]); }
 			[[nodiscard]] uint8_t BMPScanlinePadding() const noexcept { return (4 - (BytesPerLine() % 4)) % 4; }
@@ -502,7 +504,7 @@ namespace SAELib {
 						if ((Byte & 0xC0) == 0xC0) {
 							int32_t FillCount = Byte & 0x3F; // 書き込み数
 							uint8_t FillValue = kSpriteBinary[SpriteBinaryOffSet++]; // 書き込む値
-							int32_t CopyFillCount = std::min(FillCount, BytesPerLine() - DecodePtrOffSet); // 実際の書き込み数
+							int32_t CopyFillCount = (FillCount <= BytesPerLine() - DecodePtrOffSet ? FillCount : BytesPerLine() - DecodePtrOffSet); // 実際の書き込み数
 							std::memset(DecidePtr + DecodePtrOffSet, FillValue, CopyFillCount);
 							DecodePtrOffSet += CopyFillCount;
 						}
@@ -550,7 +552,7 @@ namespace SAELib {
 				BuildBMPBinary();
 			}
 
-			[[nodiscard]] const std::vector<unsigned char>& vecdata() const noexcept { 
+			[[nodiscard]] const std::vector<unsigned char>& vecdata() const noexcept {
 				return BMPBinary; 
 			}
 
@@ -1097,14 +1099,14 @@ namespace SAELib {
 				T_LoadSFFSubHeader LoadSFFSubHeader(LoadSFFHeader);
 				if (LoadSFFSubHeader.CheckError()) { return false; }
 
-				NumGroup(LoadSFFHeader.NumGroups());
-				NumImage(LoadSFFHeader.NumImages());
-				FileName(LoadSFFHeader.FileName());
 				ReserveSpriteData(LoadSFFHeader);
 
-				for (int32_t LoadNo = 0; LoadNo < NumImage(); ++LoadNo) {
+				for (int32_t LoadNo = 0; LoadNo < LoadSFFHeader.NumImages(); ++LoadNo) {
 					if (LoadSFFSubHeader.ReadSpriteBinary(LoadNo, SpriteNumberUMap, SpriteDataUMap, SFFBinaryData)) { break; };
 				}
+				NumGroup(LoadSFFHeader.NumGroups());
+				NumImage(static_cast<int32_t>(SpriteNumberUMap.size()));
+				FileName(LoadSFFHeader.FileName());
 
 				// 全てのロードが終了したら余分に確保したメモリを解放
 				shrink_to_fit();
