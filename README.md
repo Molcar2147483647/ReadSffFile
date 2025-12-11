@@ -398,6 +398,7 @@ SAELib::SFFError::ErrorMessage(ErrorID); // ErrorIDのエラーメッセージ�
 ## 使用例
 ```
 #include "h_ReadSFFFile.h"
+#include <iostream>
 
 int main()
 {
@@ -415,7 +416,29 @@ int main()
 		// 画像番号9000-0のXY軸を取得
 		sff.GetSpriteData(9000, 0).AxisX();
 		sff.GetSpriteData(9000, 0).AxisY();
+
+		std::cout << "SpriteNumberAxis: " << sff.GetSpriteData(9000, 0).AxisX() << "-" << sff.GetSpriteData(9000, 0).AxisY() << std::endl;
 	}
+
+	// 取得グループ数と取得画像数を出力
+	std::cout << "NumGroup: " << sff.NumGroup() << std::endl;
+	std::cout << "NumImage: " << sff.NumImage() << std::endl;
+
+	// すべての画像情報を出力
+	for (int32_t SpriteIndex = 0; sff.NumImage() > SpriteIndex; ++SpriteIndex) {
+		std::cout << "\nExist: " << sff.ExistSpriteDataIndex(SpriteIndex) << std::endl;
+		std::cout << "GroupNo: " << sff.GetSpriteDataIndex(SpriteIndex).GroupNo() << std::endl;
+		std::cout << "ImageNo: " << sff.GetSpriteDataIndex(SpriteIndex).ImageNo() << std::endl;
+		std::cout << "AxisX: " << sff.GetSpriteDataIndex(SpriteIndex).AxisX() << std::endl;
+		std::cout << "AxisY: " << sff.GetSpriteDataIndex(SpriteIndex).AxisY() << std::endl;
+		std::cout << "PixelBinaryDataByteSize: " << sff.GetSpriteDataIndex(SpriteIndex).PixelBinaryDataByteSize() << std::endl;
+		std::cout << "PixelWidth: " << sff.GetSpriteDataIndex(SpriteIndex).PixelWidth() << std::endl;
+		std::cout << "PixelHeight: " << sff.GetSpriteDataIndex(SpriteIndex).PixelHeight() << std::endl;
+	}
+
+	// 存在しない番号はダミーデータ判定
+	std::cout << sff.GetSpriteData(-999, -999).IsDummy() << std::endl;
+
 	// 画像番号9000-0の画像をBMP出力
 	sff.ExportToBMP(9000, 0);
 
